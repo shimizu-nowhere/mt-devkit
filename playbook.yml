@@ -1,0 +1,103 @@
+---
+- hosts: all
+  sudo: true
+  user: vagrant
+  vars:
+    # mt_src, mt_src_dir, hostname, document_root are defined in Vagrantfile
+    mt_root: "{{ document_root }}/mt"
+    dbuser: movabletype
+    dbpass: movabletype
+    dbname: movabletype
+  tasks:
+    - name: do "apt-get update"
+      apt: update_cache=yes
+
+    - name: install apache2
+      apt: name=apache2 state=latest
+    - name: disable default site
+      command: a2dissite default
+    - name: deploy cgi-script config
+      template: src=files/apache2/cgi-script dest=/etc/apache2/conf.d/cgi-script owner=root group=root mode=0644
+    - name: deploy site config
+      template: src=templates/apache2/mt-devkit.j2 dest=/etc/apache2/sites-available/mt-devkit owner=root group=root mode=0644
+    - name: enable default site
+      command: a2ensite mt-devkit
+    - name: restart apache2
+      service: name=apache2 state=restarted
+
+    - name: install mysql
+      apt: name={{ item }} state=latest
+      with_items:
+        - mysql-server
+        - python-mysqldb
+    - name: deploy mysql config
+      copy: src=files/mysql/mt-devkit.cnf dest=/etc/mysql/conf.d/mt-devkit.cnf owner=root group=root mode=0644
+    - name: restart mysql
+      service: name=mysql state=restarted
+    - name: create mysql user
+      mysql_user: name={{ dbuser }} password={{ dbpass }} priv=*.*:ALL,GRANT state=present
+    - name: create mysql db
+      mysql_db: name={{ dbname }} state=present
+
+    - name: install dependency
+      apt: name={{ item }} state=latest
+      with_items:
+        - libssl-dev
+        - libexpat-dev
+        - libxml2-dev
+        - libimage-magick-perl
+        - unzip
+
+    - name: install perl modules
+      apt: name={{ item }} state=latest
+      with_items:
+        - perl
+
+    - name: install cpanm
+      shell: curl -L http://cpanmin.us | perl - --sudo App::cpanminus creates=/usr/local/bin/cpanm
+    - name: install cpan-modules with cpanm
+      cpanm: name={{ item }} notest=true
+      with_items:
+        - DBD::mysql
+        - Image::Magick
+        - Plack
+        - CGI::PSGI
+        - Cache::File
+        - Archive::Zip
+        - XML::SAX
+        - Authen::SASL
+        - Mozilla::CA
+        - Image::Size
+        - CGI::Parse::PSGI
+        - Crypt::DSA
+        - Cache::Memcached
+        - Digest::SHA1
+        - XML::Parser
+        - XML::SAX::Expat
+        - YAML::Syck
+        - Net::SSLeay
+        - XMLRPC::Transport::HTTP::Plack
+        - SOAP::Lite
+        - Crypt::SSLeay
+        - Net::SMTP::SSL
+        - Net::SMTP::TLS
+        - IO::Socket::SSL
+        - XML::LibXML
+        - XML::Atom
+        - XML::LibXML::SAX
+        - XML::SAX::ExpatXS
+
+    - name: create document root directory
+      file: path={{ document_root }} state=directory
+
+    - name: unarchive mt files
+      unarchive: src={{ mt_src }} dest={{ document_root }}
+
+    - name: rename mt directory
+      command: mv {{ document_root }}/{{ mt_src_dir }} {{ mt_root }} creates={{ mt_root }}
+
+    - name: deploy mt-config.cgi
+      template: src=templates/mt/mt-config.cgi dest={{ mt_root }}/mt-config.cgi
+
+    - name: mt cgi permission
+      shell: chmod 755 {{ mt_root }}/*.cgi
