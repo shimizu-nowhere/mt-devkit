@@ -16,7 +16,8 @@
 
 ### 1. 開発をはじめる
 
-1. 作業用PC上にVagrant、vagrant-hostsupdaterをインストールしてください
+1. 作業用PC上に[Vagrant](https://www.vagrantup.com/)、[vagrant-hostsupdater](https://github.com/cogitatio/vagrant-hostsupdater)、[Ansible](http://www.ansible.com/)をインストールしてください
+    * Ansibleは、OSXでは `brew install ansible` でインストール可
 
 2. Movable Typeのソースファイル（MT-6.1.2.zip）を取得し、Vagrantfileのあるディレクトリに配置してください
 
@@ -25,3 +26,12 @@
 4. 作業用VM上で開発を開始してください
     * http://mt-devkit.dev/mt/mt.cgi を開くと、初期設定が開始されます
 
+## 注意点
+
+* MySQLのrootパスワードは設定されません。
+
+## 参考
+
+* [VagrantのCentOS6.5にAnsibleでMovable Typeを入れる - the code to rock](http://note103.hateblo.jp/entry/2015/04/17/010528)
+* [Ansible - Provisioning - Vagrant Documentation](http://docs.vagrantup.com/v2/provisioning/ansible.html)
+* [ApacheのAddHandlerはセキュリティ上の懸念から使用すべきではない - Dマイナー志向](http://d.hatena.ne.jp/tmatsuu/20150221/1424531513)
