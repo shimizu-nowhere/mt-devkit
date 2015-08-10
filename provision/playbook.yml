@@ -3,8 +3,8 @@
   sudo: true
   user: vagrant
   vars:
-    # mt_src, mt_src_dir, hostname, document_root are defined in Vagrantfile
-    mt_root: "{{ document_root }}/mt"
+    # some variables are defined in Vagrantfile
+    mt_root: "{{ document_root }}{{ mt_home }}"
     dbuser: movabletype
     dbpass: movabletype
     dbname: movabletype
@@ -99,5 +99,5 @@
     - name: deploy mt-config.cgi
       template: src=templates/mt/mt-config.cgi dest={{ mt_root }}/mt-config.cgi
 
-    - name: mt cgi permission
+    - name: change mt cgi permission
       shell: chmod 755 {{ mt_root }}/*.cgi

@@ -1,0 +1,24 @@
+# encoding: utf-8
+
+#
+# General Settings
+#
+vm_box: chef/debian-7.8
+
+#
+# Network Settings
+#
+hostname: mt-devkit.dev
+ip: 192.168.33.10
+sync_folder: 'www/mt-devkit'
+
+#
+# Movable Type Settings
+#
+mt_src: MT-6.1.2.zip
+
+#
+# Movable Type Path
+#
+document_root: '/var/www/mt-devkit'
+mt_home: '/mt'     # Path to the root directory of MT
