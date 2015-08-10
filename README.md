@@ -3,7 +3,8 @@
 ## ディレクトリ構成
 
 * `Vagrantfile` Vagrant用ファイル
-* `playbook.yml` `files` `templates` Ansible用ファイル
+* `provision` プロビジョニング用Ansible関連ファイル
+* `site.yml` 手順中で作成する設定ファイル
 * `www` VM内Webサイトのドキュメントルートへのリンク（VM起動中のみ）
 
 ## 用語の説明
@@ -19,7 +20,7 @@
 1. 作業用PC上に[Vagrant](https://www.vagrantup.com/)、[vagrant-hostsupdater](https://github.com/cogitatio/vagrant-hostsupdater)、[Ansible](http://www.ansible.com/)をインストールしてください
     * Ansibleは、OSXでは `brew install ansible` でインストール可
 
-2. Movable Typeのソースファイル（MT-6.x.x.zip）を取得し、provisioningディレクトリの直下に配置してください
+2. Movable Typeのソースファイル（MT-6.x.x.zip）を取得し、provisionディレクトリの直下に配置してください
 
 3. `cp provision/default.yml site.yml` を実行して、設定ファイルを作成してください
 
