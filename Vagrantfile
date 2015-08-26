@@ -37,7 +37,7 @@ Vagrant.configure(2) do |config|
   config.vm.network :private_network, ip: _conf['ip']
   # config.vm.network :forwarded_port, guest: 80, host: 80
 
-  config.vm.synced_folder _conf['sync_folder'], _conf['document_root'], create: "true", owner: "vagrant", group: "www-data", mount_options: ["dmode=775"]
+  config.vm.synced_folder _conf['sync_folder'], _conf['document_root'], create: "true", owner: "www-data", group: "www-data"
 
   if Vagrant.has_plugin?('vagrant-hostsupdater')
     config.hostsupdater.remove_on_suspend = true
