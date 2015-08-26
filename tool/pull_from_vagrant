@@ -1,0 +1,16 @@
+#!/bin/sh
+
+set -x
+
+VAGRANT_DIR="www/mt-devkit/"
+LOCAL_DIR="movabletype"
+
+# -a: アーカイブモード
+# --exclude mt-config.cgi: 環境固有の設定ファイルを除外
+# --delete: コピー元にないファイルは削除
+# --inplace: 一時ファイルを作成せず上書きする
+rsync -a --exclude mt-config.cgi --delete --inplace $VAGRANT_DIR $LOCAL_DIR
+
+set +x
+echo "done."
+set -x
